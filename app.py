@@ -31,7 +31,6 @@ from linebot.v3.webhooks import (
 )
 # 載入資料庫相關函式庫
 import pymysql
-from sqlalchemy import create_engine
 
 line_access_token = os.environ.get('HtT6YrK6biOfLWO7Osq1/2WWW2BO6Lp4bTWmO5j4ULwmZQT+UQ0QbGbMqSVGt6aYTkQALDRypYWjdJO5SkGE9eIAmTizRKWYVqdQZ3tZPxj6WfneRDfyD1+31GG6zT06ZPaCYCEHgJvGClOjT3l3GQdB04t89/1O/w1cDnyilFU=')
 line_secret = os.environ.get('83e4fb858c60d4c83e9919996bea376e')
