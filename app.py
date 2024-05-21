@@ -40,7 +40,7 @@ category_list = ['王道',' 異世界', '喜劇', '校園', '戀愛', '運動']
 
 '''資料庫連結'''
 
-host = '127.0.0.1'
+host = '0.0.0.0'
 user = 'root'
 password = ''
 database = 'acg資料庫'
