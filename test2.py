@@ -1,0 +1,155 @@
+from flask import Flask, request
+
+# 載入 json 標準函式庫，處理回傳的資料格式
+import json
+
+# 載入 LINE Message API 相關函式庫
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, MessageAction, TemplateSendMessage, ConfirmTemplate
+# 載入資料庫相關函式庫
+import pandas as pd
+import pymysql
+from sqlalchemy import create_engine
+
+'''資料庫連結'''
+
+host = '127.0.0.1'
+user = 'root'
+password = ''
+database = 'acg資料庫'
+port = 3306
+
+def Connect_Database(host,user,password,database,port):
+    connection = pymysql.connect(host=host,
+                                user=user,
+                                password=password,
+                                port=port,
+                                db=database,
+                                charset='utf8mb4',
+                                cursorclass=pymysql.cursors.DictCursor)
+    return connection
+
+def Select_data(connection,table_name,data_mumber):
+    try:
+        # 使用　with...as 可以讓我們程式正確執行下自動關閉資料庫連線
+        with connection.cursor() as cursor:
+            sql = f'SELECT * FROM {table_name} LIMIT 5 OFFSET {5 * data_mumber}'
+            cursor.execute(sql)
+            # 取出自訂資料筆數
+            result = cursor.fetchall()
+            return result
+    finally:
+        connection.close()
+
+'''linebot'''
+
+app = Flask(__name__)
+@app.route("/", methods=['POST'])
+def linebot():
+    body = request.get_data(as_text=True)                      # 取得收到的訊息內容
+    try:
+        json_data = json.loads(body)                           # json 格式化訊息內容
+        access_token = 'u3o3HIkvtPkLefPE2nPH9CsgzuXVrTTBs23gYGU0AZIrgHrb93zFJ45eQXASyDTNiP7q32LYScKAsq97+8BZ/tj0rHZ+Vg6lSoZJ69RY7bn/d0zJPy+LFnM2W/NzkSWY2vhmqFBF4+q3zEBtirf4pQdB04t89/1O/w1cDnyilFU='
+        secret = '7ca7268cb8fa26d118120a99a375142b'
+        line_bot_api = LineBotApi(access_token)                # 確認 token 是否正確
+        handler = WebhookHandler(secret)                       # 確認 secret 是否正確
+        signature = request.headers['X-Line-Signature']        # 加入回傳的 headers
+        handler.handle(body, signature)                        # 綁定訊息回傳的相關資訊
+        tk = json_data['events'][0]['replyToken']              # 取得回傳訊息的 Token
+        # type = json_data['events'][0]['message']['type']     # 取得 LINE 收到的訊息類型
+        msg = json_data['events'][0]['message']['text']        # 取得 LINE 收到的文字訊息
+        connect = Connect_Database(host,user,password,database,port)
+        if msg == '愛看啥類別':
+            reply = '@使用者 您好，\n想觀看甚麼類型的動漫呢？\n請選擇想觀看的類型吧!'
+            line_bot_api.reply_message(tk,TextSendMessage(reply))
+            pass
+        elif msg == '運動':
+            data = Select_data(connect,msg + '番資料庫',1)
+            reply_1 = f'這裡依照近期人氣為您推薦五部｢{msg}｣類別動漫：\n\n'
+            for index,value in enumerate(data):
+                # print(i)
+                # print(i['name'])
+                reply = (f'{index + 1}.『{value["name"]}』\n'
+                        f'人氣：{value["popularity"]}\n'
+                        f'上架時間：{value["date"]}\n'
+                        f'以下是觀看連結：\n'
+                        f'{value["url"]}\n')
+                reply_1 = reply_1 + reply
+            line_bot_api.reply_message(tk,TextSendMessage(reply_1))   # 回傳訊息
+            # print()
+        elif msg == '王道':
+            data = Select_data(connect,msg + '番資料庫',1)
+            reply_1 = f'這裡依照近期人氣為您推薦五部｢{msg}｣類別動漫：\n\n'
+            for index,value in enumerate(data):
+                # print(i)
+                # print(i['name'])
+                reply = (f'{index + 1}.『{value["name"]}』\n'
+                        f'人氣：{value["popularity"]}\n'
+                        f'上架時間：{value["date"]}\n'
+                        f'以下是觀看連結：\n'
+                        f'{value["url"]}\n')
+                reply_1 = reply_1 + reply
+            line_bot_api.reply_message(tk,TextSendMessage(reply_1))   # 回傳訊息
+        elif msg == '喜劇':
+            data = Select_data(connect,msg + '番資料庫',1)
+            reply_1 = f'這裡依照近期人氣為您推薦五部｢{msg}｣類別動漫：\n\n'
+            for index,value in enumerate(data):
+                # print(i)
+                # print(i['name'])
+                reply = (f'{index + 1}.『{value["name"]}』\n'
+                        f'人氣：{value["popularity"]}\n'
+                        f'上架時間：{value["date"]}\n'
+                        f'以下是觀看連結：\n'
+                        f'{value["url"]}\n')
+                reply_1 = reply_1 + reply
+            line_bot_api.reply_message(tk,TextSendMessage(reply_1))   # 回傳訊息
+
+        elif msg == '校園':
+            data = Select_data(connect,msg + '番資料庫',1)
+            reply_1 = f'這裡依照近期人氣為您推薦五部｢{msg}｣類別動漫：\n\n'
+            for index,value in enumerate(data):
+                # print(i)
+                # print(i['name'])
+                reply = (f'{index + 1}.『{value["name"]}』\n'
+                        f'人氣：{value["popularity"]}\n'
+                        f'上架時間：{value["date"]}\n'
+                        f'以下是觀看連結：\n'
+                        f'{value["url"]}\n')
+                reply_1 = reply_1 + reply
+            line_bot_api.reply_message(tk,TextSendMessage(reply_1))   # 回傳訊息
+
+        elif msg == '戀愛':
+            data = Select_data(connect,msg + '番資料庫',1)
+            reply_1 = f'這裡依照近期人氣為您推薦五部｢{msg}｣類別動漫：\n\n'
+            for index,value in enumerate(data):
+                # print(i)
+                # print(i['name'])
+                reply = (f'{index + 1}.『{value["name"]}』\n'
+                        f'人氣：{value["popularity"]}\n'
+                        f'上架時間：{value["date"]}\n'
+                        f'以下是觀看連結：\n'
+                        f'{value["url"]}\n')
+                reply_1 = reply_1 + reply
+            line_bot_api.reply_message(tk,TextSendMessage(reply_1))   # 回傳訊息
+            
+        elif msg == '異世界':
+            data = Select_data(connect,msg + '番資料庫',1)
+            reply_1 = f'這裡依照近期人氣為您推薦五部｢{msg}｣類別動漫：\n\n'
+            for index,value in enumerate(data):
+                # print(i)
+                # print(i['name'])
+                reply = (f'{index + 1}.『{value["name"]}』\n'
+                        f'人氣：{value["popularity"]}\n'
+                        f'上架時間：{value["date"]}\n'
+                        f'以下是觀看連結：\n'
+                        f'{value["url"]}\n')
+                reply_1 = reply_1 + reply
+            line_bot_api.reply_message(tk,TextSendMessage(reply_1))   # 回傳訊息
+        
+    except:
+        print(body)                                            # 如果發生錯誤，印出收到的內容
+    return 'OK'                                                # 驗證 Webhook 使用，不能省略
+
+if __name__ == "__main__":
+    app.run()
