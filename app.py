@@ -25,7 +25,7 @@ data_number = 0
 category_list = ['王道', '異世界', '喜劇', '校園', '戀愛', '運動']
 
 # Database configurations
-host = '0.0.0.0'
+host = '127.0.0.1'
 user = 'root'
 password = ''
 database = 'acg資料庫'
