@@ -18,8 +18,8 @@ from linebot.v3.webhooks import MessageEvent, TextMessageContent, StickerMessage
 import pymysql
 
 # Configurations and credentials
-line_access_token = os.environ.get('LINE_ACCESS_TOKEN')
-line_secret = os.environ.get('LINE_SECRET')
+line_access_token = os.environ.get('HtT6YrK6biOfLWO7Osq1/2WWW2BO6Lp4bTWmO5j4ULwmZQT+UQ0QbGbMqSVGt6aYTkQALDRypYWjdJO5SkGE9eIAmTizRKWYVqdQZ3tZPxj6WfneRDfyD1+31GG6zT06ZPaCYCEHgJvGClOjT3l3GQdB04t89/1O/w1cDnyilFU=')
+line_secret = os.environ.get('83e4fb858c60d4c83e9919996bea376e')
 port_1 = 5000
 data_number = 0
 category_list = ['王道', '異世界', '喜劇', '校園', '戀愛', '運動']
@@ -127,8 +127,8 @@ def format_random(result, user_name):
 
 app = Flask(__name__)
 
-configuration = Configuration(access_token=line_access_token)
-handler = WebhookHandler(channel_secret=line_secret)
+configuration = Configuration(access_token='HtT6YrK6biOfLWO7Osq1/2WWW2BO6Lp4bTWmO5j4ULwmZQT+UQ0QbGbMqSVGt6aYTkQALDRypYWjdJO5SkGE9eIAmTizRKWYVqdQZ3tZPxj6WfneRDfyD1+31GG6zT06ZPaCYCEHgJvGClOjT3l3GQdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler(channel_secret='83e4fb858c60d4c83e9919996bea376e')
 
 @app.route("/", methods=['POST'])
 def callback():
